@@ -1,11 +1,16 @@
+const jwt = require("jsonwebtoken");
+const secret = "your-secret-key";
+
 function basicAuth(req, res, next) {
-  const authHeader = req.headers["authorization"];
+  const token = req.cookies.token;
+  if (!token) return res.status(401).send("No token");
 
-  if (!authHeader) {
-    return res.status(401).send("Access denied. No credentials sent.");
+  try {
+    req.user = jwt.verify(token, secret);
+    next();
+  } catch {
+    res.status(401).send("Invalid token");
   }
-
-  next();
 }
 
 module.exports = basicAuth;
