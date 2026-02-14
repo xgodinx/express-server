@@ -11,7 +11,6 @@ const app = express();
 
 app.use(express.json());
 
-// Sessions
 app.use(
   session({
     secret: "secret-key",
@@ -20,16 +19,13 @@ app.use(
   }),
 );
 
-// Root route + logging
 app.get("/", logRequests, (req, res) => {
   res.send("Get root route");
 });
 
-// Routes
 app.use("/users", usersRoutes);
 app.use("/articles", articlesRoutes);
 
-// Error middleware (ВСЕГДА последним)
 app.use(errorHandler);
 
 const PORT = 3000;
