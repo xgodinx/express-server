@@ -1,5 +1,6 @@
 const express = require("express");
 const session = require("express-session");
+const path = require("path");
 
 const usersRoutes = require("./routes/users.routes");
 const articlesRoutes = require("./routes/articles.routes");
@@ -19,6 +20,10 @@ app.use(
   }),
 );
 
+app.use(express.static("public"));
+
+app.set("views", path.join(__dirname, "views"));
+
 app.get("/", logRequests, (req, res) => {
   res.send("Get root route");
 });
@@ -28,8 +33,6 @@ app.use("/articles", articlesRoutes);
 
 app.use(errorHandler);
 
-const PORT = 3000;
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.listen(3000, () => {
+  console.log("Server running on port 3000");
 });

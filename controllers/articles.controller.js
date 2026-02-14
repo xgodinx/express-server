@@ -1,22 +1,24 @@
+const articles = [
+  { id: 1, title: "Node Guide" },
+  { id: 2, title: "Express Basics" },
+];
+
 exports.getArticles = (req, res) => {
-  res.send("Get articles route");
+  res.render("articles/articles.ejs", { articles });
 };
 
+exports.getArticleById = (req, res) => {
+  const article = articles.find((a) => a.id == req.params.articleId);
+  res.render("articles/article.ejs", { article });
+};
 exports.postArticles = (req, res) => {
   res.send("Post articles route");
 };
 
-exports.getArticleById = (req, res) => {
-  const { articleId } = req.params;
-  res.send(`Get article by Id route: ${articleId}`);
-};
-
 exports.putArticleById = (req, res) => {
-  const { articleId } = req.params;
-  res.send(`Put article by Id route: ${articleId}`);
+  res.send(`Put article by Id route: ${req.params.articleId}`);
 };
 
 exports.deleteArticleById = (req, res) => {
-  const { articleId } = req.params;
-  res.send(`Delete article by Id route: ${articleId}`);
+  res.send(`Delete article by Id route: ${req.params.articleId}`);
 };
