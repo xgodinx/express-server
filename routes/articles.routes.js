@@ -3,11 +3,19 @@ const router = express.Router();
 
 const articlesController = require("../controllers/articles.controller");
 
-router.get("/", articlesController.getArticles);
-router.post("/", articlesController.postArticles);
+const checkPermissions = require("../middlewares/permissions.middleware");
 
-router.get("/:articleId", articlesController.getArticleById);
-router.put("/:articleId", articlesController.putArticleById);
-router.delete("/:articleId", articlesController.deleteArticleById);
+router.get("/", checkPermissions, articlesController.getArticles);
+router.post("/", checkPermissions, articlesController.postArticles);
+
+router.get("/:articleId", checkPermissions, articlesController.getArticleById);
+
+router.put("/:articleId", checkPermissions, articlesController.putArticleById);
+
+router.delete(
+  "/:articleId",
+  checkPermissions,
+  articlesController.deleteArticleById,
+);
 
 module.exports = router;
