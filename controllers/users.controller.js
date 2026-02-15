@@ -1,5 +1,6 @@
 const User = require("../models/User");
 
+// --- MongoDB CRUD ---
 exports.getUsersFromDB = async (req, res) => {
   try {
     const users = await User.find();
@@ -19,28 +20,66 @@ exports.getUserByIdFromDB = async (req, res) => {
   }
 };
 
-const users = [
-  { id: 1, name: "Dima" },
-  { id: 2, name: "Anna" },
-];
-
-exports.getUsers = (req, res) => {
-  res.render("users/users.pug", { users });
+exports.createUser = async (req, res) => {
+  try {
+    const user = new User(req.body);
+    await user.save();
+    res.send("User created");
+  } catch (err) {
+    res.status(400).send(err.message);
+  }
 };
 
-exports.getUserById = (req, res) => {
-  const user = users.find((u) => u.id == req.params.userId);
-  res.render("users/user.pug", { user });
+exports.createManyUsers = async (req, res) => {
+  try {
+    await User.insertMany(req.body.users);
+    res.send("Multiple users created");
+  } catch (err) {
+    res.status(400).send(err.message);
+  }
 };
 
-exports.postUsers = (req, res) => {
-  res.send("Post users route");
+exports.updateUser = async (req, res) => {
+  try {
+    await User.updateOne({ _id: req.params.userId }, req.body);
+    res.send("User updated");
+  } catch (err) {
+    res.status(400).send(err.message);
+  }
 };
 
-exports.putUserById = (req, res) => {
-  res.send(`Put user by Id: ${req.params.userId}`);
+exports.updateManyUsers = async (req, res) => {
+  try {
+    await User.updateMany(req.body.filter, req.body.update);
+    res.send("Multiple users updated");
+  } catch (err) {
+    res.status(400).send(err.message);
+  }
 };
 
-exports.deleteUserById = (req, res) => {
-  res.send(`Delete user by Id: ${req.params.userId}`);
+exports.replaceUser = async (req, res) => {
+  try {
+    await User.replaceOne({ _id: req.params.userId }, req.body);
+    res.send("User replaced");
+  } catch (err) {
+    res.status(400).send(err.message);
+  }
+};
+
+exports.deleteUserFromDB = async (req, res) => {
+  try {
+    await User.deleteOne({ _id: req.params.userId });
+    res.send("User deleted");
+  } catch (err) {
+    res.status(400).send(err.message);
+  }
+};
+
+exports.deleteManyUsers = async (req, res) => {
+  try {
+    await User.deleteMany(req.body.filter);
+    res.send("Multiple users deleted");
+  } catch (err) {
+    res.status(400).send(err.message);
+  }
 };
