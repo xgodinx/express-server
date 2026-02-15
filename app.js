@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
+const passport = require("./config/passport");
 
 const usersRoutes = require("./routes/users.routes");
 const articlesRoutes = require("./routes/articles.routes");
@@ -20,9 +21,16 @@ app.use(
   session({
     secret: "secret-key",
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      secure: false,
+    },
   }),
 );
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(express.static("public"));
 
@@ -33,6 +41,13 @@ app.use(logRequests);
 
 app.get("/", (req, res) => {
   res.send("Get root route");
+});
+
+app.get("/protected", (req, res) => {
+  if (req.isAuthenticated()) {
+    return res.send("Protected route доступен!");
+  }
+  res.status(401).send("Unauthorized");
 });
 
 app.use("/users", usersRoutes);
