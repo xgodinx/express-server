@@ -10,4 +10,6 @@ html
           p ID: #{user._id}
           p Name: #{user.name}
           p Email: #{user.email}
+          if user.age
+            p Age: #{user.age}
           a(href=`/users/db/${user._id}`) Details
