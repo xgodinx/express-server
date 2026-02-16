@@ -16,4 +16,8 @@ router.put("/db/replace/:userId", usersController.replaceUser);
 router.delete("/db/:userId", usersController.deleteUserFromDB);
 router.delete("/db/many", usersController.deleteManyUsers);
 
+router.get("/db/cursor", usersController.getUsersWithCursor);
+
+router.get("/db/stats", usersController.getUsersStats);
+
 module.exports = router;
