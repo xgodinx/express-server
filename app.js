@@ -1,4 +1,5 @@
 const express = require("express");
+const connectDB = require("./config/db");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
@@ -12,6 +13,7 @@ const logRequests = require("./middlewares/logger.middleware");
 const errorHandler = require("./middlewares/error.middleware");
 
 const app = express();
+connectDB();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
